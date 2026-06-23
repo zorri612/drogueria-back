@@ -1,9 +1,14 @@
-import express from 'express';
-import { getInventory, createInventory } from './inventory.controller';
+import { Router } from "express";
 
-const router = express.Router();
+import {
+  getInventory,
+  createInventory
+} from "./inventory.controller";
 
-router.get('/', getInventory);
-router.post('/', createInventory);
+const router = Router();
+
+router.get("/", getInventory);
+
+router.post("/", createInventory);
 
 export default router;

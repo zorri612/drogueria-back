@@ -1,16 +1,40 @@
-let products = [];
+import { Request, Response } from "express";
 
-export const getProducts = (req, res) => {
+import Product from "./products.model";
+
+export const getProducts = async (
+  req: Request,
+  res: Response
+) => {
+
+  const products =
+    await Product.find()
+      .sort({ nombre: 1 });
+
   res.json(products);
+
 };
 
-export const createProduct = (req, res) => {
-  const newProduct = {
-    id: Date.now(),
-    ...req.body
-  };
+export const createProduct = async (
+  req: Request,
+  res: Response
+) => {
 
-  products.push(newProduct);
+  const exists = await Product.findOne({
+    nombre: req.body.nombre.toUpperCase()
+  });
 
-  res.json(newProduct);
+  if (exists) {
+
+    return res.status(400).json({
+      message:
+        "El medicamento ya existe"
+    });
+
+  }
+
+  const product =
+    await Product.create(req.body);
+
+  res.status(201).json(product);
 };

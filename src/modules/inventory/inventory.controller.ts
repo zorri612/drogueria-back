@@ -1,16 +1,32 @@
-let inventory = [];
+import { Request, Response } from "express";
 
-export const getInventory = (req, res) => {
+import Inventory from "./inventory.model";
+
+export const getInventory = async (
+  req: Request,
+  res: Response
+) => {
+
+  const inventory =
+    await Inventory.find()
+      .populate("productoId")
+      .sort({
+        fechaVencimiento: 1
+      });
+
   res.json(inventory);
+
 };
 
-export const createInventory = (req, res) => {
-  const item = {
-    id: Date.now(),
-    ...req.body
-  };
+export const createInventory =
+async (
+  req: Request,
+  res: Response
+) => {
 
-  inventory.push(item);
+  const item =
+    await Inventory.create(req.body);
 
-  res.json(item);
+  res.status(201).json(item);
+
 };

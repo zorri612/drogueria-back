@@ -1,6 +1,28 @@
 import { Schema, model } from "mongoose";
 
-const productSchema = new Schema(
+const PresentationSchema = new Schema(
+  {
+    nombre: {
+      type: String,
+      required: true
+    },
+
+    factor: {
+      type: Number,
+      required: true
+    },
+
+    permiteVenta: {
+      type: Boolean,
+      default: true
+    }
+  },
+  {
+    _id: false
+  }
+);
+
+const ProductSchema = new Schema(
   {
     nombre: {
       type: String,
@@ -9,24 +31,22 @@ const productSchema = new Schema(
       trim: true
     },
 
-    descripcion: String,
-
-    categoria: String,
+    descripcion: {
+      type: String,
+      default: ""
+    },
 
     tipo: {
       type: String,
       enum: [
         "MEDICAMENTO",
         "SERVICIO",
-        "INSUMO"
+        "COMBO"
       ],
-      default: "MEDICAMENTO"
+      required: true
     },
 
-    activo: {
-      type: Boolean,
-      default: true
-    }
+    presentaciones: [PresentationSchema]
   },
   {
     timestamps: true
@@ -35,5 +55,5 @@ const productSchema = new Schema(
 
 export default model(
   "Product",
-  productSchema
+  ProductSchema
 );
